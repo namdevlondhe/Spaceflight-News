@@ -1,6 +1,6 @@
 package com.dev.data.mapper
 
-import com.dev.data.entity.ArticleData
+import com.dev.data.dto.ArticleData
 import com.dev.domain.model.Article
 
 fun Article.toEntity() = ArticleData(

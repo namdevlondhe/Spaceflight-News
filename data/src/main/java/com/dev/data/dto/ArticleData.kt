@@ -1,4 +1,4 @@
-package com.dev.data.entity
+package com.dev.data.dto
 
 data class ArticleData(
     val id: Int,

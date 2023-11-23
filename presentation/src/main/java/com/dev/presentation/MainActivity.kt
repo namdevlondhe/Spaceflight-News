@@ -3,6 +3,9 @@ package com.dev.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -23,29 +26,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CleanArchitectureTheme {
-                val navController = rememberNavController()
-                NavHost(
-                    navController = navController,
-                    startDestination = "article_list_screen",
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    composable("article_list_screen") {
-                        ArticleListScreen(navController = navController)
-                    }
-                    composable(
-                        "article_detail_screen/{dominantColor}/{articleName}",
-                        arguments = listOf(
-                            navArgument("dominantColor") {
-                                type = NavType.IntType
-                            },
-                            navArgument("articleName") {
-                                type = NavType.StringType
-                            },
-                        ),
+                    //Greeting("Android")
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "article_list_screen",
                     ) {
-                        val articleName = remember {
-                            it.arguments?.getString("articleName")
+                        composable("article_list_screen") {
+                            ArticleListScreen(navController = navController)
+                        }
+                        composable(
+                            "article_detail_screen/{dominantColor}/{articleName}",
+                            arguments = listOf(
+                                navArgument("dominantColor") {
+                                    type = NavType.IntType
+                                },
+                                navArgument("articleName") {
+                                    type = NavType.StringType
+                                },
+                            ),
+                        ) {
+                            val articleName = remember {
+                                it.arguments?.getString("articleName")
+                            }
                         }
                     }
+
                 }
             }
         }

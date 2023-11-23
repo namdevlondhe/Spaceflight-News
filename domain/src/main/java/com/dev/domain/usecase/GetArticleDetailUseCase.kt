@@ -2,14 +2,13 @@ package com.dev.domain.usecase
 
 import com.dev.domain.model.Article
 import com.dev.domain.repository.ArticleRepository
-import com.dev.domain.usecase.base.SingleUseCase
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetArticleDetailUseCase @Inject constructor(
     private val articleRepository: ArticleRepository
-) : SingleUseCase<Article>() {
-    override fun buildUseCaseSingle(): Single<Article> {
+) : ArticleDetailUseCase {
+    override suspend fun invoke(): Flow<Article> {
         return articleRepository.getArticleDetails(1)
     }
 }
