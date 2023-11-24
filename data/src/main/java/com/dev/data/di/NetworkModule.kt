@@ -3,9 +3,13 @@ package com.dev.data.di
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import com.dev.data.mapper.ArticleResultDataMapperclass
+import com.dev.data.mapper.EntityDataMapper
 import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.repository.ArticleRepository
+import com.dev.domain.usecase.ArticleListUseCase
+import com.dev.domain.usecase.GetArticleListUseCase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -117,8 +121,17 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideArticleRepository(
-        retrofitService: RetrofitService
+        retrofitService: RetrofitService,
+        entityDataMapper: ArticleResultDataMapperclass
     ): ArticleRepository {
-        return ArticleRepositoryImpl(retrofitService)
+        return ArticleRepositoryImpl(retrofitService,entityDataMapper)
+    }
+
+    @Singleton
+    @Provides
+    fun providesArticleListUseCase(
+        articleRepository: ArticleRepository
+    ):ArticleListUseCase{
+        return GetArticleListUseCase(articleRepository)
     }
 }

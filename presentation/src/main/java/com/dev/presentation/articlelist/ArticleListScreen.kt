@@ -40,9 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.dev.domain.model.Article
 import com.dev.presentation.ui.theme.Roboto
 import com.dev.presentation.R
+import com.dev.presentation.model.NewsArticle
 
 @Composable
 @Preview
@@ -163,7 +163,7 @@ fun ArticleList(
         items(articleList.size){
             if(it >= itemCount - 1 && !endReached && !isLoading){
                 LaunchedEffect(key1 = true){
-                    viewModel.getArticleList()
+                    viewModel.fetchArticleList()
                 }
             }
             ArticleRow(rowIndex = it, entries = articleList, navController = navController)
@@ -179,7 +179,7 @@ fun ArticleList(
         }
         if(loadError.isNotEmpty()) {
             RetrySection(error = loadError) {
-                viewModel.getArticleList()
+                viewModel.fetchArticleList()
             }
         }
     }
@@ -187,7 +187,7 @@ fun ArticleList(
 
 @Composable
 fun ArticleEntry(
-    entry: Article,
+    entry: NewsArticle,
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: ArticleListViewModel = hiltViewModel()
@@ -270,7 +270,7 @@ fun ArticleEntry(
 @Composable
 fun ArticleRow(
     rowIndex: Int,
-    entries: List<Article>,
+    entries: List<NewsArticle>,
     navController: NavController
 ) {
     Column {

@@ -1,0 +1,22 @@
+package com.dev.data.mapper
+
+import com.dev.data.dto.ArticleData
+import com.dev.domain.model.Article
+import javax.inject.Inject
+
+class EntityDataMapper @Inject constructor() {
+    fun mapFromModel(model: Article): ArticleData {
+        return with(model) {
+            ArticleData(
+                id = id,
+                title = title,
+                url = url,
+                image_url = image_url,
+                news_site = news_site,
+                summary = summary,
+                published_at = published_at,
+                featured = featured
+            )
+        }
+    }
+}
