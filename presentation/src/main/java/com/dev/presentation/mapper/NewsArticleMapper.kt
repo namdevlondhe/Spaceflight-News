@@ -4,7 +4,7 @@ import com.dev.domain.model.Article
 import com.dev.presentation.model.NewsArticle
 import javax.inject.Inject
 
-class ArticleNewsMapper @Inject constructor() {
+class NewsArticleMapper @Inject constructor() {
     fun mapFromModel(model: Article): NewsArticle {
         return with(model) {
             NewsArticle(

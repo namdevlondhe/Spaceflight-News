@@ -8,9 +8,9 @@ import javax.inject.Inject
 class ArticleResultDataMapperclass @Inject constructor(
 private val characterMapper: EntityDataMapper
 )  {
-    fun mapFromModel(model: ArticleResult):ArticleResultData {
+    fun mapFromModel(model: ArticleResultData):ArticleResult {
         return with(model) {
-            ArticleResultData(count = count,
+            ArticleResult(count = count,
             next = next,
             previous = previous,
             results=results)

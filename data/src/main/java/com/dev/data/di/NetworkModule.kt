@@ -68,18 +68,19 @@ class NetworkModule {
                  * and indicate an error in fetching the response.
                  * The 'max-age' attribute is responsible for this behavior.
                  */
-                request = if (true) request.newBuilder() // make default to true till i figure out how to inject network status
-                    .header("Cache-Control", "public, max-age=" + 5).build()
-                /*If there is no Internet, get the cache that was stored 7 days ago.
-                 * If the cache is older than 7 days, then discard it,
-                 * and indicate an error in fetching the response.
-                 * The 'max-stale' attribute is responsible for this behavior.
-                 * The 'only-if-cached' attribute indicates to not retrieve new data; fetch the cache only instead.
-                 */
-                else request.newBuilder().header(
-                    "Cache-Control",
-                    "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
-                ).build()
+                request =
+                    if (true) request.newBuilder() // make default to true till i figure out how to inject network status
+                        .header("Cache-Control", "public, max-age=" + 5).build()
+                    /*If there is no Internet, get the cache that was stored 7 days ago.
+                     * If the cache is older than 7 days, then discard it,
+                     * and indicate an error in fetching the response.
+                     * The 'max-stale' attribute is responsible for this behavior.
+                     * The 'only-if-cached' attribute indicates to not retrieve new data; fetch the cache only instead.
+                     */
+                    else request.newBuilder().header(
+                        "Cache-Control",
+                        "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
+                    ).build()
                 chain.proceed(request)
             }
         return client.build()
@@ -122,16 +123,17 @@ class NetworkModule {
     @Provides
     fun provideArticleRepository(
         retrofitService: RetrofitService,
-        entityDataMapper: ArticleResultDataMapperclass
+        articleResultDataMapper: ArticleResultDataMapperclass,
+        entityDataMapper: EntityDataMapper
     ): ArticleRepository {
-        return ArticleRepositoryImpl(retrofitService,entityDataMapper)
+        return ArticleRepositoryImpl(retrofitService, articleResultDataMapper, entityDataMapper)
     }
 
     @Singleton
     @Provides
     fun providesArticleListUseCase(
         articleRepository: ArticleRepository
-    ):ArticleListUseCase{
+    ): ArticleListUseCase {
         return GetArticleListUseCase(articleRepository)
     }
 }

@@ -8,16 +8,21 @@ import com.dev.domain.model.ArticleResult
 import com.dev.domain.repository.ArticleRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ArticleRepositoryImpl(
+class ArticleRepositoryImpl @Inject constructor(
     private val retrofitService: RetrofitService,
-    private val entityDataMapper: ArticleResultDataMapperclass
+    private val articleResultDataMapper: ArticleResultDataMapperclass,
+    private val entityDataMapper: EntityDataMapper
 ) : ArticleRepository {
-    override suspend fun getArticles(): Flow<ArticleResult>  {
-        return retrofitService.getArticles()
+
+    override suspend fun getArticles(): Flow<ArticleResult> = flow {
+        val characters = retrofitService.getArticles()
+        emit(articleResultDataMapper.mapFromModel(characters))
     }
-    override suspend fun getArticleDetails(id: Int): Flow<Article> {
-        return retrofitService.getArticleDetail(id)
+
+    override suspend fun getArticleDetails(id: Int): Flow<Article> = flow {
+        val character = retrofitService.getArticleDetail(id)
+        emit(entityDataMapper.mapFromModel(character))
     }
 }

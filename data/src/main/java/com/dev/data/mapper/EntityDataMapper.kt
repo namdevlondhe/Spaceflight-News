@@ -5,9 +5,9 @@ import com.dev.domain.model.Article
 import javax.inject.Inject
 
 class EntityDataMapper @Inject constructor() {
-    fun mapFromModel(model: Article): ArticleData {
+    fun mapFromModel(model: ArticleData): Article {
         return with(model) {
-            ArticleData(
+            Article(
                 id = id,
                 title = title,
                 url = url,

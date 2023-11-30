@@ -3,9 +3,7 @@ package com.dev.presentation.articlelist
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.dev.domain.usecase.ArticleListUseCase
-import com.dev.domain.usecase.GetArticleListUseCase
 import com.dev.presentation.base.BaseViewModel
-import com.dev.presentation.mapper.ArticleNewsMapper
 import com.dev.presentation.mapper.NewsArticleResultMapper
 import com.dev.presentation.model.NewsArticle
 import dagger.hilt.android.lifecycle.HiltViewModel
