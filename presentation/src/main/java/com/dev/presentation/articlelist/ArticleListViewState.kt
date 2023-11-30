@@ -1,6 +1,5 @@
 package com.dev.presentation.articlelist
 
-import com.dev.domain.model.ArticleResult
 import com.dev.presentation.base.SideEffect
 import com.dev.presentation.base.ViewIntent
 import com.dev.presentation.base.ViewState
