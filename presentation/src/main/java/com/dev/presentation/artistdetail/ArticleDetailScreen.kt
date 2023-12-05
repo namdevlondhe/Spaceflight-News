@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -40,6 +39,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dev.presentation.R
 import com.dev.presentation.model.NewsArticle
+import com.dev.presentation.ui.theme.BackgroundColor
+import com.dev.presentation.ui.theme.SubTextColor
+import com.dev.presentation.ui.theme.TextColor
 
 @Composable
 fun ArticleDetailScreen(
@@ -68,7 +70,7 @@ fun ArticleDetailScreen(
 @Composable
 fun DetailDataScreen(data: NewsArticle) {
     Surface(
-        color = Color(0xFFDEEDED), modifier = Modifier.fillMaxSize()
+        color = BackgroundColor, modifier = Modifier.fillMaxSize()
     ) {
         Column(modifier = Modifier.padding(start = 28.dp, end = 25.dp)) {
             Spacer(modifier = Modifier.height(20.dp))
@@ -78,7 +80,7 @@ fun DetailDataScreen(data: NewsArticle) {
                     fontSize = 30.sp,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(700),
-                    color = Color(0xFF2E3156),
+                    color = TextColor,
                     letterSpacing = 1.8.sp,
                 ), modifier = Modifier
                     .width(128.dp)
@@ -89,7 +91,7 @@ fun DetailDataScreen(data: NewsArticle) {
                     .padding(top = 12.dp, bottom = 12.dp)
                     .width(318.dp)
                     .height(1.dp)
-                    .background(color = Color(0xFF5D5F7E))
+                    .background(color = SubTextColor)
             )
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current).data(data.image_url)

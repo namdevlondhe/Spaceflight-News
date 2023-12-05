@@ -39,6 +39,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dev.presentation.R
 import com.dev.presentation.model.NewsArticle
+import com.dev.presentation.ui.theme.BackgroundColor
+import com.dev.presentation.ui.theme.SubTextColor
+import com.dev.presentation.ui.theme.TextColor
 
 /**
  * This function is responsible to provide the UI for article list using compose
@@ -48,7 +51,7 @@ fun ArticleListScreen(
     callback: (id: Int) -> Unit
 ) {
     Surface(
-        color = Color(0xFFDEEDED),
+        color = BackgroundColor,
         modifier = Modifier.fillMaxSize()
     ) {
         Column(modifier = Modifier.padding(start = 28.dp, end = 25.dp)) {
@@ -57,7 +60,7 @@ fun ArticleListScreen(
                 modifier = Modifier
                     .width(318.dp)
                     .height(1.dp)
-                    .background(color = Color(0xFF5D5F7E))
+                    .background(color = SubTextColor)
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -66,7 +69,7 @@ fun ArticleListScreen(
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(500),
-                    color = Color(0xFF5D5F7E),
+                    color = SubTextColor,
 
                     )
             )
@@ -147,7 +150,7 @@ fun ArticleEntry(
                 fontFamily = FontFamily(Font(R.font.roboto_regular)),
                 fontSize = 16.sp,
                 fontWeight = FontWeight(600),
-                color = Color(0xFF2E3156),
+                color = TextColor,
                 modifier = Modifier
                     .padding(start = 10.dp)
             )
