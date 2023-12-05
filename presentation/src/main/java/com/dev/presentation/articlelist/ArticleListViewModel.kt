@@ -1,7 +1,6 @@
 package com.dev.presentation.articlelist
 
 import androidx.lifecycle.viewModelScope
-import com.dev.domain.model.Article
 import com.dev.domain.usecase.ArticleListUseCase
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleResultMapper
@@ -17,9 +16,6 @@ class ArticleListViewModel @Inject constructor(
     private val articleNewsMapper: NewsArticleResultMapper
 ): BaseViewModel<ArticleListViewState, ArticleListViewIntent, ArticleListSideEffect>() {
 
-    init {
-        fetchArticleList()
-    }
     fun fetchArticleList(){
         viewModelScope.launch {
             articleListUseCase().onStart {
@@ -32,7 +28,16 @@ class ArticleListViewModel @Inject constructor(
         }
     }
 
-    override fun sendIntent(intent: ArticleListViewIntent) {
+    private fun navigateToDetails(id: Int) {
+        viewModelScope.launch {
+            _sideEffect.emit(ArticleListSideEffect.NavigateToDetails(id))
+        }
+    }
 
+    override fun sendIntent(intent: ArticleListViewIntent) {
+        when(intent){
+            is ArticleListViewIntent.LoadData -> fetchArticleList()
+            is ArticleListViewIntent.OnArticleClick -> navigateToDetails(1)
+        }
     }
 }

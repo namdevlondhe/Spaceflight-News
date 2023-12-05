@@ -1,6 +1,5 @@
 package com.dev.domain.usecase
 
-import com.dev.domain.model.Article
 import com.dev.domain.model.ArticleResult
 import com.dev.domain.repository.ArticleRepository
 import kotlinx.coroutines.flow.Flow

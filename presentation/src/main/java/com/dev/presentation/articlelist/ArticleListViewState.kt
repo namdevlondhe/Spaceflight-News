@@ -16,7 +16,7 @@ sealed interface ArticleListViewState: ViewState {
 sealed interface ArticleListViewIntent: ViewIntent {
     object LoadData: ArticleListViewIntent
 
-    class OnCharacterClick(val id: Int): ArticleListViewIntent
+    class OnArticleClick(val id: Int): ArticleListViewIntent
 }
 
 sealed interface ArticleListSideEffect: SideEffect {

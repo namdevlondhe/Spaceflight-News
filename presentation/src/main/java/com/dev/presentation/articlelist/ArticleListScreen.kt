@@ -120,8 +120,6 @@ fun ArticleList(
                 }
             }
         }
-
-        else -> {}
     }
 }
 

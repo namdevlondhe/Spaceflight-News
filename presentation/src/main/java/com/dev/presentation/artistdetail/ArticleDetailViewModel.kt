@@ -2,7 +2,6 @@ package com.dev.presentation.artistdetail
 
 import androidx.lifecycle.viewModelScope
 import com.dev.domain.usecase.GetArticleDetailUseCase
-import com.dev.presentation.articlelist.ArticleListViewIntent
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleMapper
 import dagger.hilt.android.lifecycle.HiltViewModel

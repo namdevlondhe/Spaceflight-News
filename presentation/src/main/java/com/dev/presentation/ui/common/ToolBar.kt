@@ -67,7 +67,7 @@ fun DefaultPreview() {
     BaseScreen(
         title = stringResource(id = R.string.title),
         showBackButton = true,
-        onBackClicked = { /*TODO*/ }) {
+        onBackClicked = { }) {
         Text(text = "Hello")
     }
 }

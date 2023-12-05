@@ -1,5 +1,6 @@
 package com.dev.presentation.artistdetail
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -42,8 +43,7 @@ import com.dev.presentation.model.NewsArticle
 
 @Composable
 fun ArticleDetailScreen(
-    id: Int,
-    viewModel: ArticleDetailViewModel = hiltViewModel()
+    id: Int, viewModel: ArticleDetailViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(Unit) {
@@ -68,22 +68,19 @@ fun ArticleDetailScreen(
 @Composable
 fun DetailDataScreen(data: NewsArticle) {
     Surface(
-        color = Color(0xFFDEEDED),
-        modifier = Modifier.fillMaxSize()
+        color = Color(0xFFDEEDED), modifier = Modifier.fillMaxSize()
     ) {
         Column(modifier = Modifier.padding(start = 28.dp, end = 25.dp)) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = data.title,
-                style = TextStyle(
+                text = data.title, style = TextStyle(
                     fontSize = 30.sp,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(700),
                     color = Color(0xFF2E3156),
                     letterSpacing = 1.8.sp,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .width(128.dp)
                     .height(35.dp)
             )
@@ -95,13 +92,10 @@ fun DetailDataScreen(data: NewsArticle) {
                     .background(color = Color(0xFF5D5F7E))
             )
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(data.image_url)
-                    .placeholder(R.drawable.loading)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data(data.image_url)
+                    .placeholder(R.drawable.loading).build(),
                 contentDescription = data.title,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
 
             WebView(url = data.url)
@@ -109,28 +103,23 @@ fun DetailDataScreen(data: NewsArticle) {
     }
 }
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebView(url: String) {
     var backEnabled by remember { mutableStateOf(false) }
-    var webView: WebView? = null
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                webViewClient = object : WebViewClient() {
-                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                        backEnabled = view.canGoBack()
-                    }
+    AndroidView(factory = { context ->
+        WebView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            webViewClient = object : WebViewClient() {
+                override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+                    backEnabled = view.canGoBack()
                 }
-                settings.javaScriptEnabled = true
-
-                loadUrl(url)
-                webView = this
             }
-        }, update = {
-            webView = it
-        })
+            settings.javaScriptEnabled = true
+
+            loadUrl(url)
+        }
+    })
 }
