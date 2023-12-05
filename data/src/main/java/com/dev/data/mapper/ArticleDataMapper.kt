@@ -4,7 +4,7 @@ import com.dev.data.dto.ArticleData
 import com.dev.domain.model.Article
 import javax.inject.Inject
 
-class EntityDataMapper @Inject constructor() {
+class ArticleDataMapper @Inject constructor() {
     fun mapFromModel(model: ArticleData): Article {
         return with(model) {
             Article(

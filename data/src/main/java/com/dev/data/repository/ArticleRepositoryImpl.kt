@@ -1,7 +1,7 @@
 package com.dev.data.repository
 
 import com.dev.data.mapper.ArticleResultDataMapperclass
-import com.dev.data.mapper.EntityDataMapper
+import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.model.Article
 import com.dev.domain.model.ArticleResult
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class ArticleRepositoryImpl @Inject constructor(
     private val retrofitService: RetrofitService,
     private val articleResultDataMapper: ArticleResultDataMapperclass,
-    private val entityDataMapper: EntityDataMapper
+    private val articleDataMapper: ArticleDataMapper
 ) : ArticleRepository {
 
     override suspend fun getArticles(): Flow<ArticleResult> = flow {
@@ -23,6 +23,6 @@ class ArticleRepositoryImpl @Inject constructor(
 
     override suspend fun getArticleDetails(id: Int): Flow<Article> = flow {
         val character = retrofitService.getArticleDetail(id)
-        emit(entityDataMapper.mapFromModel(character))
+        emit(articleDataMapper.mapFromModel(character))
     }
 }

@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetArticleDetailUseCase @Inject constructor(
     private val articleRepository: ArticleRepository
 ) : ArticleDetailUseCase {
-    override suspend fun invoke(): Flow<Article> {
-        return articleRepository.getArticleDetails(1)
+    override suspend fun invoke(id:Int): Flow<Article> {
+        return articleRepository.getArticleDetails(id)
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import com.dev.data.mapper.ArticleResultDataMapperclass
-import com.dev.data.mapper.EntityDataMapper
+import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.repository.ArticleRepository
@@ -124,9 +124,9 @@ class NetworkModule {
     fun provideArticleRepository(
         retrofitService: RetrofitService,
         articleResultDataMapper: ArticleResultDataMapperclass,
-        entityDataMapper: EntityDataMapper
+        articleDataMapper: ArticleDataMapper
     ): ArticleRepository {
-        return ArticleRepositoryImpl(retrofitService, articleResultDataMapper, entityDataMapper)
+        return ArticleRepositoryImpl(retrofitService, articleResultDataMapper, articleDataMapper)
     }
 
     @Singleton

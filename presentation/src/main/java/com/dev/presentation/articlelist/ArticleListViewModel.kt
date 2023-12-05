@@ -1,6 +1,7 @@
 package com.dev.presentation.articlelist
 
 import androidx.lifecycle.viewModelScope
+import com.dev.domain.model.Article
 import com.dev.domain.usecase.ArticleListUseCase
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleResultMapper
