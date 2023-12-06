@@ -13,6 +13,10 @@ import com.dev.presentation.artistdetail.ArticleDetailScreen
 import com.dev.presentation.constants.Constant.ARTICLE_ID
 import com.dev.presentation.ui.common.BaseScreen
 
+/**
+ * This composable function is used to add the manage the screen for the module
+ * @param navController - Nav host controller to manage the screens for navigation
+ */
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(

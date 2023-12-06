@@ -4,7 +4,14 @@ import com.dev.domain.model.Article
 import com.dev.presentation.model.NewsArticle
 import javax.inject.Inject
 
+/**
+ * This is the mapper class to map the data from one model to another
+ */
 class NewsArticleMapper @Inject constructor() {
+    /**
+     * This function is responsible to return the NewsArticle from Article
+     * @param model - Article model
+     */
     fun mapFromModel(model: Article): NewsArticle {
         return with(model) {
             NewsArticle(

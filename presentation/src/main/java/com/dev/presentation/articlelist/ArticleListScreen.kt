@@ -44,7 +44,7 @@ import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
 
 /**
- * This function is responsible to provide the UI for article list using compose
+ * This function is responsible to provide the UI for news article list using compose
  */
 @Composable
 fun ArticleListScreen(

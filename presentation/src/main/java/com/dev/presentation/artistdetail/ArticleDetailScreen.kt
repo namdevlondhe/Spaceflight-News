@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -43,6 +45,9 @@ import com.dev.presentation.ui.theme.BackgroundColor
 import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
 
+/**
+ * This composable function is responsible for creating detail screen for News Artile
+ */
 @Composable
 fun ArticleDetailScreen(
     id: Int, viewModel: ArticleDetailViewModel = hiltViewModel()
@@ -56,7 +61,12 @@ fun ArticleDetailScreen(
 
     when (viewState.value) {
         is ArticleDetailViewState.Loading -> {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
         }
 
         is ArticleDetailViewState.Success -> {

@@ -1,5 +1,8 @@
 package com.dev.presentation.model
 
+/**
+ * Data class for news article
+ */
 data class NewsArticle(
     val id: Int,
     val title: String,

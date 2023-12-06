@@ -3,6 +3,9 @@ package com.dev.presentation.base
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 
+/**
+ * This class is used as Base class for ViewModel
+ */
 abstract class BaseViewModel<VS: ViewState, VI: ViewIntent, SE: SideEffect>: ViewModel() {
 
     protected val _state = MutableSharedFlow<VS>()
