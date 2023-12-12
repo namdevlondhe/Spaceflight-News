@@ -1,6 +1,6 @@
 package com.dev.data.repository
 
-import com.dev.data.mapper.ArticleResultDataMapperclass
+import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.model.Article
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class ArticleRepositoryImpl @Inject constructor(
     private val retrofitService: RetrofitService,
-    private val articleResultDataMapper: ArticleResultDataMapperclass,
+    private val articleResultDataMapper: ArticleResultDataMapper,
     private val articleDataMapper: ArticleDataMapper
 ) : ArticleRepository {
 

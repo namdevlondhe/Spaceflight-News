@@ -3,7 +3,7 @@ package com.dev.data.di
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.dev.data.mapper.ArticleResultDataMapperclass
+import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
@@ -113,7 +113,7 @@ class NetworkModule {
     @Provides
     fun provideArticleRepository(
         retrofitService: RetrofitService,
-        articleResultDataMapper: ArticleResultDataMapperclass,
+        articleResultDataMapper: ArticleResultDataMapper,
         articleDataMapper: ArticleDataMapper
     ): ArticleRepository {
         return ArticleRepositoryImpl(retrofitService, articleResultDataMapper, articleDataMapper)

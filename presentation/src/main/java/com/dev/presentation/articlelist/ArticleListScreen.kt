@@ -69,9 +69,7 @@ fun ArticleListScreen(
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(500),
-                    color = SubTextColor,
-
-                    )
+                    color = SubTextColor)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
