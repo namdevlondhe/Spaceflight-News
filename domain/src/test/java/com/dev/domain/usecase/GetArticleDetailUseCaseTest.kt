@@ -1,50 +1,55 @@
 package com.dev.domain.usecase
 
-import com.dev.domain.model.Article
+import com.dev.domain.fakes.FakeData
 import com.dev.domain.repository.ArticleRepository
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 class GetArticleDetailUseCaseTest {
 
+    private val characterRepository = mockk<ArticleRepository>()
+    private lateinit var getCharacterByIdUseCaseImpl: GetArticleDetailUseCase
+
+    @Before
+    fun setup() {
+        MockKAnnotations.init()
+        getCharacterByIdUseCaseImpl = GetArticleDetailUseCase(characterRepository)
+    }
+
     @Test
-    fun `invoke with valid id should return article details`() = runBlocking {
-        // Given
-        val mockRepository = mockk<ArticleRepository>()
-        val getArticleDetailUseCase = GetArticleDetailUseCase(mockRepository)
-        val expectedArticleDetail = createMockArticleDetail()
+    fun `GIVEN id WHEN use-case invoke called THEN character detail return`() = runTest {
+        val character = FakeData.getArticle()
+        coEvery { characterRepository.getArticleDetails(ID) } returns character
 
-        // When
-        coEvery { mockRepository.getArticleDetails(any()) } returns expectedArticleDetail
-        val result = getArticleDetailUseCase.invoke(1)
+        getCharacterByIdUseCaseImpl(ID)
 
-        // Then
-        result.collect { article ->
-            assertEquals(expectedArticleDetail, article)
+        verify(times(1)) {
+            characterRepository.getArticleDetails(ID)
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `invoke with invalid id should throw an exception`() = runBlocking {
-        // Given
-        val mockRepository = mockk<ArticleRepository>()
-        val getArticleDetailUseCase = GetArticleDetailUseCase(mockRepository)
+    @Test(expected = IOException::class)
+    fun `GIVEN id WHEN use-case invoke called THEN exception thrown`() = runTest {
+        coEvery { characterRepository.getArticleDetails(ID) } answers {
+            throw IOException()
+        }
 
-        // When
-        coEvery { mockRepository.getArticleDetails(any()) } throws Exception("Article not found")
-        getArticleDetailUseCase.invoke(invalidArticleId)
+        getCharacterByIdUseCaseImpl(ID)
+
+        verify(times(1)) {
+            characterRepository.getArticleDetails(ID)
+        }
+
     }
 
-    private fun createMockArticleDetail(): Flow<Article> {
-        return mockk<Flow<Article>>()
-    }
-
-    companion object {
-        const val invalidArticleId = -1
+    private companion object {
+        const val ID = 36
     }
 }

@@ -10,15 +10,14 @@ import com.dev.domain.model.ArticleResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class ArticleRepositoryImplTest {
 
     @Test
-    fun `getArticles should return ArticleResult when retrofitService returns data`() = runBlockingTest {
+    fun `getArticles should return ArticleResult when retrofitService returns data`() = runBlocking {
         // Given
         val mockArticles = mockk<ArticleResultData>()
         val articleResul  = mockk<ArticleResult>()
@@ -40,7 +39,7 @@ class ArticleRepositoryImplTest {
     }
 
     @Test
-    fun `getArticleDetails should return Article when retrofitService returns data`() = runBlockingTest {
+    fun `getArticleDetails should return Article when retrofitService returns data`() = runBlocking {
         // Given
         val mockArticle = mockk<ArticleData>()
         val articleResul  = mockk<Article>()

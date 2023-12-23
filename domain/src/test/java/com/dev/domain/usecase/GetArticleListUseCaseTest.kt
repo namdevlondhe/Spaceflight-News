@@ -1,51 +1,51 @@
 package com.dev.domain.usecase
 
-import com.dev.domain.model.Article
-import com.dev.domain.model.ArticleResult
+import com.dev.domain.fakes.FakeData
 import com.dev.domain.repository.ArticleRepository
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 class GetArticleListUseCaseTest {
 
+    private val characterRepository = mockk<ArticleRepository>()
+    private lateinit var getCharactersUseCaseImpl: GetArticleListUseCase
+
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this)
+        getCharactersUseCaseImpl = GetArticleListUseCase(characterRepository)
+    }
+
     @Test
-    fun `invoke should return article list`() = runBlocking {
-        // Given
-        val mockRepository = mockk<ArticleRepository>()
-        val getArticleListUseCase = GetArticleListUseCase(mockRepository)
-        val expectedArticleList = createMockArticleResult()
+    fun `GIVEN no data WHEN use-case invoke called THEN character list return`() = runTest {
+        val characters = FakeData.getArticles()
+        coEvery { characterRepository.getArticles() } returns characters
 
-        // When
-        coEvery { mockRepository.getArticles() } returns expectedArticleList
-        val result = getArticleListUseCase.invoke()
+        getCharactersUseCaseImpl()
 
-        // Then
-        result.collect { articleResult ->
-            assertEquals(expectedArticleList, articleResult)
+        verify(times(1)) {
+            characterRepository.getArticles()
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `invoke with repository exception should throw an exception`() = runBlocking {
-        // Given
-        val mockRepository = mockk<ArticleRepository>()
-        val getArticleListUseCase = GetArticleListUseCase(mockRepository)
+    @Test(expected = IOException::class)
+    fun `GIVEN no data WHEN use-case invoke called THEN exception thrown`() = runTest {
+        coEvery { characterRepository.getArticles() } answers {
+            throw IOException()
+        }
 
-        // When
-        coEvery { mockRepository.getArticles() } throws Exception("Error fetching articles")
-        getArticleListUseCase.invoke()
-    }
+        getCharactersUseCaseImpl()
 
-    private fun createMockArticleResult(): Flow<ArticleResult> {
-        return mockk<Flow<ArticleResult>>()
-    }
+        verify(times(1)) {
+            characterRepository.getArticles()
+        }
 
-    private fun createMockArticle(): Article {
-        return mockk<Article>()
     }
 }

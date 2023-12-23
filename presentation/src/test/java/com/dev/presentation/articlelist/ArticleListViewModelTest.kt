@@ -53,7 +53,6 @@ class ArticleListViewModelTest {
             // Act
             val stateFlow = MutableStateFlow<ArticleListViewState>(mockViewState)
             launch {
-               // viewModel.collectState(stateFlow)
                 viewModel.stateSharedFlow.collect()
             }
             viewModel.fetchArticleList()
@@ -61,7 +60,6 @@ class ArticleListViewModelTest {
             // Assert
 
             assert(stateFlow.value is ArticleListViewState.Success)
-            //assert(stateFlow.value == mockViewState)
             assertEquals(stateFlow.value , mockViewState)
         }
 
