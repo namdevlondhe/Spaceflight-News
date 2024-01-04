@@ -1,4 +1,4 @@
-package com.dev.presentation.artistdetail
+package com.dev.presentation.articledetail
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap

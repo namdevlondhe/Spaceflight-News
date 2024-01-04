@@ -1,4 +1,4 @@
-package com.dev.presentation.artistdetail
+package com.dev.presentation.articledetail
 
 import androidx.lifecycle.viewModelScope
 import com.dev.domain.usecase.GetArticleDetailUseCase

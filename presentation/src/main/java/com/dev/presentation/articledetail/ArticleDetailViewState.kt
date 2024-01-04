@@ -1,4 +1,4 @@
-package com.dev.presentation.artistdetail
+package com.dev.presentation.articledetail
 
 import com.dev.presentation.base.SideEffect
 import com.dev.presentation.base.ViewIntent

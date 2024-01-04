@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dev.presentation.R
 import com.dev.presentation.articlelist.ArticleListScreen
-import com.dev.presentation.artistdetail.ArticleDetailScreen
+import com.dev.presentation.articledetail.ArticleDetailScreen
 import com.dev.presentation.constants.Constant.ARTICLE_ID
 import com.dev.presentation.ui.common.BaseScreen
 
