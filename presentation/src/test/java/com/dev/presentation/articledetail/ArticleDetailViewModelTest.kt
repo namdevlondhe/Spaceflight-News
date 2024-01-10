@@ -1,6 +1,5 @@
 package com.dev.presentation.articledetail
 
-import com.dev.domain.fakes.FakeData
 import com.dev.domain.model.Article
 import com.dev.domain.usecase.GetArticleDetailUseCase
 import com.dev.presentation.mapper.NewsArticleMapper
@@ -18,12 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 
 @ExperimentalCoroutinesApi

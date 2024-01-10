@@ -47,6 +47,16 @@ ext {
     // test dependencies
     junitVersion = '4.13'
     mockitoKotlinVersion = '2.1.0'
+    core_testing = "2.2.0"
+    coroutines_test = "1.6.2"
+    junit = "4.13.2"
+    androidx_junit = "1.1.5"
+    turbine = "1.0.0"
+    test_manifest = "1.6.0-beta03"
+    runtime_compose = "2.6.2"
+    compose_ui_version = '1.2.0'
+
+
 
     // Common dependencies
     kotlinDependencies = [
@@ -149,7 +159,13 @@ ext {
                     composeDependencies.composeToolingPreview,
                     composeDependencies.composeUi,
                     composeDependencies.composeUiGraphics
-            ]
+            ],
+            junit : "junit:junit:$junit",
+            androidx_junit : "androidx.test.ext:junit:$androidx_junit",
+            test_manifest : "androidx.compose.ui:ui-test-manifest:$test_manifest",
+            ui_test_junit : "androidx.compose.ui:ui-test-junit4:$compose_ui_version",
+            turbine : "app.cash.turbine:turbine:$turbine",
+            runtime_compose : "androidx.lifecycle:lifecycle-runtime-compose:$composeVersion",
 
     ]
 }

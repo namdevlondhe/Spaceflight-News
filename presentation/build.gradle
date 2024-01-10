@@ -3,12 +3,13 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    //id 'app.cash.paparazzi' version '1.3.1'
 }
 
 
 android {
     namespace 'com.dev.presentation'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 24
@@ -69,6 +70,14 @@ dependencies {
 
     // Compose
     implementation presentationModuleDependencies.compose
+
+    androidTestImplementation presentationModuleDependencies.ui_test_junit
+    debugImplementation presentationModuleDependencies.test_manifest
+
+    testImplementation presentationModuleDependencies.junit
+    androidTestImplementation presentationModuleDependencies.androidx_junit
+
+    testImplementation presentationModuleDependencies.turbine
 
     testImplementation testDependencies.coroutinesTest
     testImplementation testDependencies.jUnit
