@@ -3,8 +3,8 @@ package com.dev.data.di
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.mapper.ArticleDataMapper
+import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.repository.ArticleRepository
@@ -37,14 +37,12 @@ class NetworkModule {
         gsonConverterFactory: GsonConverterFactory,
         rxJava2CallAdapterFactory: RxJava2CallAdapterFactory,
         okHttpClient: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(gsonConverterFactory)
-            .addCallAdapterFactory(rxJava2CallAdapterFactory)
-            .client(okHttpClient)
-            .build()
-    }
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(gsonConverterFactory)
+        .addCallAdapterFactory(rxJava2CallAdapterFactory)
+        .client(okHttpClient)
+        .build()
 
     @Provides
     @Singleton
@@ -56,20 +54,15 @@ class NetworkModule {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
-            .cache(mCache) // make your app offline-friendly without a database!
+            .cache(mCache)
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .addNetworkInterceptor(interceptor)
             .addInterceptor { chain ->
                 var request = chain.request()
-                /* If there is Internet, get the cache that was stored 5 seconds ago.
-                 * If the cache is older than 5 seconds, then discard it,
-                 * and indicate an error in fetching the response.
-                 * The 'max-age' attribute is responsible for this behavior.
-                 */
                 request =
-                    request.newBuilder() // make default to true till i figure out how to inject network status
+                    request.newBuilder()
                         .header("Cache-Control", "public, max-age=" + 5).build()
                 chain.proceed(request)
             }
@@ -78,21 +71,17 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesGson(): Gson {
-        return Gson()
-    }
+    fun providesGson() = Gson()
 
     @Provides
     @Singleton
-    fun providesGsonConverterFactory(): GsonConverterFactory {
-        return GsonConverterFactory.create()
-    }
+    fun providesGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+
 
     @Provides
     @Singleton
-    fun providesRxJavaCallAdapterFactory(): RxJava2CallAdapterFactory {
-        return RxJava2CallAdapterFactory.create()
-    }
+    fun providesRxJavaCallAdapterFactory(): RxJava2CallAdapterFactory =
+        RxJava2CallAdapterFactory.create()
 
     @Provides
     @Singleton
@@ -105,25 +94,20 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideService(retrofit: Retrofit): RetrofitService {
-        return retrofit.create(RetrofitService::class.java)
-    }
+    fun provideService(retrofit: Retrofit): RetrofitService =
+        retrofit.create(RetrofitService::class.java)
 
     @Singleton
     @Provides
     fun provideArticleRepository(
         retrofitService: RetrofitService,
-        articleResultDataMapper: ArticleResultDataMapper,
-        articleDataMapper: ArticleDataMapper
-    ): ArticleRepository {
-        return ArticleRepositoryImpl(retrofitService, articleResultDataMapper, articleDataMapper)
-    }
+        articleResultDataMapper: ArticleResultDataMapper
+    ): ArticleRepository =
+        ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
     @Singleton
     @Provides
     fun providesArticleListUseCase(
         articleRepository: ArticleRepository
-    ): ArticleListUseCase {
-        return GetArticleListUseCase(articleRepository)
-    }
+    ): ArticleListUseCase = GetArticleListUseCase(articleRepository)
 }

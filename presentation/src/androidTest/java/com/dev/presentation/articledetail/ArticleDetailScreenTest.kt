@@ -2,7 +2,8 @@ package com.dev.presentation.articledetail
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.dev.presentation.model.NewsArticle
+import com.dev.presentation.articlelist.ArticleListScreenTest.Companion.TITLE
+import com.dev.presentation.articlelist.ArticleListScreenTest.Companion.articleItem
 import org.junit.Rule
 import org.junit.Test
 
@@ -14,28 +15,11 @@ class ArticleDetailScreenTest {
     @Test
     fun test_characters_list_screen() {
         testRule.setContent {
-            DetailDataScreen(getCharacterItem())
+            DetailDataScreen(articleItem)
         }
+
         testRule.run {
             onNodeWithText(TITLE).assertExists()
         }
-    }
-
-    private fun getCharacterItem(): NewsArticle {
-        return NewsArticle(
-            id = 1,
-            title = "Title",
-            url = "https://url.com",
-            image_url  = "https://utl.com",
-            news_site = "site",
-            summary = "Aummary",
-            published_at = "10/10/2023",
-            featured = false
-        )
-    }
-
-    private companion object {
-        const val TITLE = "Title"
-        const val SUMMARY = "Aummary"
     }
 }

@@ -17,7 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.dev.presentation.R
+import com.dev.presentation.ui.theme.BackgroundColor
+import com.dev.presentation.ui.theme.UiSize.Companion.UI_SIZE_14
 
 /**
  * This composable function is used for base screen for tool bar and action handling for back
@@ -31,20 +35,20 @@ fun BaseScreen(
     content: @Composable () -> Unit
 ) {
     Scaffold(
-        modifier = Modifier.background(color = Color(0xFFDEEDED)),
+        modifier = Modifier.background(color = BackgroundColor),
         topBar = {
             TopAppBar(
 
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFFDEEDED)),
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = BackgroundColor),
 
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = 14.dp)
+                        modifier = Modifier.padding(start = UI_SIZE_14)
                     ) {
                         if (showBackButton) {
                             IconButton(onClick = { onBackClicked.invoke() }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.content_description_back_button))
                             }
                         }
                         Text(

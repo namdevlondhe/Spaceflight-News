@@ -3,4 +3,6 @@
     <string name="title">Article List</string>
     <string name="sub_title">Shows the list of Articles</string>
     <string name="button_retry">Retry</string>
+    <string name="content_description_back_button">Back Button</string>
+    <string name="article_detail">Article Detail</string>
 </resources>

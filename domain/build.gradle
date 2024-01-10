@@ -18,5 +18,5 @@ dependencies {
     testImplementation testDependencies.coroutinesTest
     testImplementation testDependencies.jUnit
     testImplementation testDependencies.mockitoKotlin
-    testImplementation "io.mockk:mockk:1.12.5"
+    testImplementation testDependencies.mockk
 }

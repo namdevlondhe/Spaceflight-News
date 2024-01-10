@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dev.presentation.R
-import com.dev.presentation.articlelist.ArticleListScreen
 import com.dev.presentation.articledetail.ArticleDetailScreen
+import com.dev.presentation.articlelist.ArticleListScreen
 import com.dev.presentation.constants.Constant.ARTICLE_ID
 import com.dev.presentation.ui.common.BaseScreen
 
@@ -24,14 +24,7 @@ fun NavigationGraph(navController: NavHostController) {
         startDestination = AppScreens.ArticleListScreen.route
     ) {
         composable(AppScreens.ArticleListScreen.route) {
-            BaseScreen(
-                title = stringResource(id = R.string.title),
-                showBackButton = false,
-                onBackClicked = {}) {
-                ArticleListScreen {
-                        navController.navigate(AppScreens.ArticleDetailScreen.route + "/${it}")
-                }
-            }
+            ArticleListNavigation(navController = navController)
         }
         composable(
             "${AppScreens.ArticleDetailScreen.route}/{${ARTICLE_ID}}",
@@ -39,17 +32,34 @@ fun NavigationGraph(navController: NavHostController) {
         ) { navBackStackEntry ->
             val articleId = navBackStackEntry.arguments?.getInt(ARTICLE_ID)
             articleId?.let {
-                BaseScreen(
-                    title = "Character Detail",
-                    showBackButton = true,
-                    onBackClicked = {
-                        navController.popBackStack()
-                    }) {
-                    ArticleDetailScreen(
-                        id = articleId
-                    )
-                }
+                ArticleDetailNavigation(navController = navController, articleId)
             }
         }
+    }
+}
+
+@Composable
+fun ArticleListNavigation(navController: NavHostController) {
+    BaseScreen(
+        title = stringResource(id = R.string.title),
+        showBackButton = false,
+        onBackClicked = {}) {
+        ArticleListScreen {
+            navController.navigate(AppScreens.ArticleDetailScreen.route + "/${it}")
+        }
+    }
+}
+
+@Composable
+fun ArticleDetailNavigation(navController: NavHostController, articleId: Int) {
+    BaseScreen(
+        title = stringResource(id = R.string.article_detail),
+        showBackButton = true,
+        onBackClicked = {
+            navController.popBackStack()
+        }) {
+        ArticleDetailScreen(
+            id = articleId
+        )
     }
 }

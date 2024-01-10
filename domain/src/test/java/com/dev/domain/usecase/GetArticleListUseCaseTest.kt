@@ -13,7 +13,6 @@ import org.junit.Test
 import java.io.IOException
 
 class GetArticleListUseCaseTest {
-
     private val characterRepository = mockk<ArticleRepository>()
     private lateinit var getCharactersUseCaseImpl: GetArticleListUseCase
 
@@ -46,6 +45,5 @@ class GetArticleListUseCaseTest {
         verify(times(1)) {
             characterRepository.getArticles()
         }
-
     }
 }

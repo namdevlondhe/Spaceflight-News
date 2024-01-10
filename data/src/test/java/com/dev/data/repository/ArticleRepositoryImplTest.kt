@@ -1,8 +1,6 @@
 package com.dev.data.repository
 
-import com.dev.data.dto.ArticleData
 import com.dev.data.dto.ArticleResultData
-import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.model.Article
@@ -17,46 +15,45 @@ import org.junit.Test
 class ArticleRepositoryImplTest {
 
     @Test
-    fun `getArticles should return ArticleResult when retrofitService returns data`() = runBlocking {
-        // Given
-        val mockArticles = mockk<ArticleResultData>()
-        val articleResul  = mockk<ArticleResult>()
-        val retrofitService = mockk<RetrofitService>()
-        val articleResultDataMapper = mockk<ArticleResultDataMapper>()
-        val articleDataMapper = mockk<ArticleDataMapper>()
-        val repository = ArticleRepositoryImpl(retrofitService, articleResultDataMapper, articleDataMapper)
+    fun `WHEN getArticles invoked THEN ArticleResult is retrofitService THEN returns data`() =
+        runBlocking {
+            // Given
+            val mockArticles = mockk<ArticleResultData>()
+            val articleResul = mockk<ArticleResult>()
+            val retrofitService = mockk<RetrofitService>()
+            val articleResultDataMapper = mockk<ArticleResultDataMapper>()
+            val repository =
+                ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
-        coEvery { retrofitService.getArticles() } returns mockArticles
-        coEvery { articleResultDataMapper.mapFromModel(any()) } returns articleResul
+            coEvery { retrofitService.getArticles() } returns mockArticles
+            coEvery { articleResultDataMapper.map(any()) } returns articleResul
 
-        // When
-        repository.getArticles().toList()
+            // When
+            repository.getArticles().toList()
 
-        // Then
-        // Verify that there are no more interactions with the mocks
-        coVerify(exactly = 1) { retrofitService.getArticles() }
-        coVerify(exactly = 1) { articleResultDataMapper.mapFromModel(any()) }
-    }
+            // Then
+            coVerify(exactly = 1) { retrofitService.getArticles() }
+            coVerify(exactly = 1) { articleResultDataMapper.map(any()) }
+        }
 
     @Test
-    fun `getArticleDetails should return Article when retrofitService returns data`() = runBlocking {
-        // Given
-        val mockArticle = mockk<ArticleData>()
-        val articleResul  = mockk<Article>()
-        val retrofitService = mockk<RetrofitService>()
-        val articleResultDataMapper = mockk<ArticleResultDataMapper>()
-        val articleDataMapper = mockk<ArticleDataMapper>()
-        val repository = ArticleRepositoryImpl(retrofitService, articleResultDataMapper, articleDataMapper)
+    fun `WHEN getArticleDetails invoked THEN Article is retrofitService THEN returns data`() =
+        runBlocking {
+            // Given
+            val mockArticle = mockk<Article>()
+            val articleResul = mockk<Article>()
+            val retrofitService = mockk<RetrofitService>()
+            val articleResultDataMapper = mockk<ArticleResultDataMapper>()
+            val repository =
+                ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
-        coEvery { retrofitService.getArticleDetail(any()) } returns mockArticle
-        coEvery { articleDataMapper.mapFromModel(any()) } returns articleResul
+            //coEvery { articleDataMapper.map(any()) } returns articleResul
+            coEvery { retrofitService.getArticleDetail(any()) } returns mockArticle
 
-        // When
-        repository.getArticleDetails(1).toList()
+            // When
+            repository.getArticleDetails(1).toList()
 
-        // Then
-        // Verify that there are no more interactions with the mocks
-        coVerify(exactly = 1) { retrofitService.getArticleDetail(any()) }
-        coVerify(exactly = 1) { articleDataMapper.mapFromModel(any()) }
-    }
+            // Then
+            coVerify(exactly = 1) { retrofitService.getArticleDetail(any()) }
+        }
 }

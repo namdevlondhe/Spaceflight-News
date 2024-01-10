@@ -13,7 +13,6 @@ import org.junit.Test
 import java.io.IOException
 
 class GetArticleDetailUseCaseTest {
-
     private val characterRepository = mockk<ArticleRepository>()
     private lateinit var getCharacterByIdUseCaseImpl: GetArticleDetailUseCase
 
@@ -46,7 +45,6 @@ class GetArticleDetailUseCaseTest {
         verify(times(1)) {
             characterRepository.getArticleDetails(ID)
         }
-
     }
 
     private companion object {

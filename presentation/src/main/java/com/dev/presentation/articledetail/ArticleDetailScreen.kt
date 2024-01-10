@@ -33,17 +33,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dev.presentation.R
+ import com.dev.presentation.articlelist.RetrySection
 import com.dev.presentation.model.NewsArticle
 import com.dev.presentation.ui.theme.BackgroundColor
 import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
+import com.dev.presentation.ui.theme.UiSize
+import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_30
 
 /**
  * This composable function is responsible for creating detail screen for News Artile
@@ -57,7 +59,7 @@ fun ArticleDetailScreen(
         viewModel.sendIntent(ArticleDetailViewIntent.LoadData(id))
     }
     val viewState =
-        viewModel.stateSharedFlow.collectAsState(initial = ArticleDetailViewState.Loading)
+        viewModel.stateFlow.collectAsState(initial = ArticleDetailViewState.Loading)
 
     when (viewState.value) {
         is ArticleDetailViewState.Loading -> {
@@ -73,7 +75,18 @@ fun ArticleDetailScreen(
             DetailDataScreen((viewState.value as ArticleDetailViewState.Success).data)
         }
 
-        is ArticleDetailViewState.Error -> {}
+        is ArticleDetailViewState.Error -> {
+            (viewState.value as ArticleDetailViewState.Error).throwable.message?.let {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    RetrySection(it) {
+                        viewModel.sendIntent(ArticleDetailViewIntent.LoadData(id))
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -82,29 +95,29 @@ fun DetailDataScreen(data: NewsArticle) {
     Surface(
         color = BackgroundColor, modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(start = 28.dp, end = 25.dp)) {
-            Spacer(modifier = Modifier.height(20.dp))
+        Column(modifier = Modifier.padding(start = UiSize.UI_SIZE_28, end = UiSize.UI_SIZE_25)) {
+            Spacer(modifier = Modifier.height(UiSize.UI_SIZE_20))
 
             Text(
                 text = data.title, style = TextStyle(
-                    fontSize = 30.sp,
+                    fontSize = UI_SP_SIZE_30,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(700),
                     color = TextColor,
                     letterSpacing = 1.8.sp,
                 ), modifier = Modifier
-                    .width(128.dp)
-                    .height(35.dp)
+                    .width(UiSize.UI_SIZE_128)
+                    .height(UiSize.UI_SIZE_35)
             )
             Divider(
                 modifier = Modifier
-                    .padding(top = 12.dp, bottom = 12.dp)
-                    .width(318.dp)
-                    .height(1.dp)
+                    .padding(top = UiSize.UI_SIZE_12, bottom = UiSize.UI_SIZE_12)
+                    .width(UiSize.UI_SIZE_318)
+                    .height(UiSize.UI_SIZE_1)
                     .background(color = SubTextColor)
             )
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(data.image_url)
+                model = ImageRequest.Builder(LocalContext.current).data(data.imageUrl)
                     .placeholder(R.drawable.loading).build(),
                 contentDescription = data.title,
                 modifier = Modifier.fillMaxWidth()
@@ -117,7 +130,7 @@ fun DetailDataScreen(data: NewsArticle) {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebView(url: String) {
+private fun WebView(url: String) {
     var backEnabled by remember { mutableStateOf(false) }
     AndroidView(factory = { context ->
         WebView(context).apply {

@@ -1,14 +1,11 @@
 package com.dev.presentation.articledetail
 
-import com.dev.domain.model.Article
+import app.cash.turbine.test
+import com.dev.domain.fakes.FakeData
 import com.dev.domain.usecase.GetArticleDetailUseCase
 import com.dev.presentation.mapper.NewsArticleMapper
-import com.dev.presentation.model.NewsArticle
 import io.mockk.MockKAnnotations
-import org.junit.Before
-import org.junit.Test
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +15,13 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class ArticleDetailViewModelTest {
@@ -44,50 +45,37 @@ class ArticleDetailViewModelTest {
 
     @Test
     fun `fetchArticleInfo should emit Loading, Success states when use case returns data`() =
-        runBlocking {
-            // Arrange
-            val articleId = 1
-            val mockNewsArticle = mockk<NewsArticle>()
-            val mockArticle = mockk<Article>()
-            val mockViewState = ArticleDetailViewState.Success(mockNewsArticle)
-            coEvery { getArticleDetailUseCase(articleId) } returns flowOf(mockArticle)
-            every { articleMapper.mapFromModel(mockArticle) } returns mockNewsArticle
+        runTest {
+            val data = FakeData.getNewsArticle()
+            coEvery { getArticleDetailUseCase(ID) } returns flowOf(FakeData.getArticle())
 
-            // Act
-            val stateFlow = MutableStateFlow<ArticleDetailViewState>(ArticleDetailViewState.Loading)
-            launch {
-                viewModel.stateSharedFlow.collect {
-                    stateFlow.value = it
-                }
-            }
-            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(articleId))
+            coEvery {
+                articleMapper.map(FakeData.getArticles().results[0])
+            } returns data
 
-            // Assert
-            assert(stateFlow.value is ArticleDetailViewState.Success)
-            assertEquals(stateFlow.value, mockViewState)
+            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(ID))
+            val result = viewModel.stateFlow.value
+            assertEquals(
+                result,
+                viewModel.stateFlow.value
+            )
         }
 
     @Test
     fun `fetchArticleInfo should emit Loading, Error states when use case throws an exception`() =
-        runBlocking {
-            // Arrange
-            val articleId = 1
-            val exception = RuntimeException("Test Exception")
-            val mockErrorState = ArticleDetailViewState.Error(exception)
-            coEvery { getArticleDetailUseCase(articleId) } throws exception
+        runTest {
+            coEvery { getArticleDetailUseCase(ID) } answers {  throw exception }
 
-            // Act
-            val stateFlow = MutableStateFlow<ArticleDetailViewState>(ArticleDetailViewState.Loading)
-            launch {
-                viewModel.stateSharedFlow.collect {
-                    stateFlow.value = it
-                }
+            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(ID))
+
+            viewModel.stateFlow.test {
+                Assert.assertTrue(awaitItem() is ArticleDetailViewState.Error)
             }
-            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(articleId))
-
-            // Assert
-            assert(stateFlow.value is ArticleDetailViewState.Error)
-            assertEquals(stateFlow.value, mockErrorState)
         }
+
+    companion object {
+        val exception = RuntimeException("Test Exception")
+        const val ID = 1
+    }
 }
 

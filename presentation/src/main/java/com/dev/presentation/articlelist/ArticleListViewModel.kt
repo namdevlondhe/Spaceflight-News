@@ -2,6 +2,7 @@ package com.dev.presentation.articlelist
 
 import androidx.lifecycle.viewModelScope
 import com.dev.domain.usecase.ArticleListUseCase
+import com.dev.presentation.articledetail.ArticleDetailViewState
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleResultMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,11 +26,11 @@ class ArticleListViewModel @Inject constructor(
     fun fetchArticleList(){
         viewModelScope.launch {
             articleListUseCase().onStart {
-                _state.emit(ArticleListViewState.Loading)
+                state.emit(ArticleListViewState.Loading)
             }.catch {
-                _state.emit(ArticleListViewState.Error(it))
+                state.emit(ArticleListViewState.Error(it))
             }.collect{
-                _state.emit(ArticleListViewState.Success(articleNewsMapper.mapFromModel(it)))
+                state.emit(ArticleListViewState.Success(articleNewsMapper.map(it)))
             }
         }
     }
@@ -40,7 +41,7 @@ class ArticleListViewModel @Inject constructor(
      */
     private fun navigateToDetails(id: Int) {
         viewModelScope.launch {
-            _sideEffect.emit(ArticleListSideEffect.NavigateToDetails(id))
+            sideEffect.emit(ArticleListSideEffect.NavigateToDetails(id))
         }
     }
 
@@ -51,7 +52,10 @@ class ArticleListViewModel @Inject constructor(
     override fun sendIntent(intent: ArticleListViewIntent) {
         when(intent){
             is ArticleListViewIntent.LoadData -> fetchArticleList()
-            is ArticleListViewIntent.OnArticleClick -> navigateToDetails(1)
+            is ArticleListViewIntent.OnArticleClick -> navigateToDetails(intent.id)
         }
     }
+
+    override fun createInitialState() = ArticleListViewState.Loading
+
 }

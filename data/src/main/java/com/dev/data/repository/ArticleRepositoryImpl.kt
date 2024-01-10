@@ -13,16 +13,14 @@ import javax.inject.Inject
 class ArticleRepositoryImpl @Inject constructor(
     private val retrofitService: RetrofitService,
     private val articleResultDataMapper: ArticleResultDataMapper,
-    private val articleDataMapper: ArticleDataMapper
 ) : ArticleRepository {
 
     override suspend fun getArticles(): Flow<ArticleResult> = flow {
         val characters = retrofitService.getArticles()
-        emit(articleResultDataMapper.mapFromModel(characters))
+        emit(articleResultDataMapper.map(characters))
     }
 
     override suspend fun getArticleDetails(id: Int): Flow<Article> = flow {
-        val character = retrofitService.getArticleDetail(id)
-        emit(articleDataMapper.mapFromModel(character))
+        emit(retrofitService.getArticleDetail(id))
     }
 }

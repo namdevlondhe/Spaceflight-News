@@ -28,67 +28,71 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.dev.presentation.R
 import com.dev.presentation.model.NewsArticle
+import com.dev.presentation.ui.common.HeaderTitle
 import com.dev.presentation.ui.theme.BackgroundColor
 import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
+import com.dev.presentation.ui.theme.UiSize
+import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_16
+import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_18
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * This function is responsible to provide the UI for news article list using compose
  */
 @Composable
 fun ArticleListScreen(
-    callback: (id: Int) -> Unit
+    onListItemClicked: (id: Int) -> Unit
 ) {
     Surface(
         color = BackgroundColor,
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(start = 28.dp, end = 25.dp)) {
+        Column(modifier = Modifier.padding(start = UiSize.UI_SIZE_28, end = UiSize.UI_SIZE_25)) {
+            ArticleScreenHeader()
 
-            Divider(
-                modifier = Modifier
-                    .width(318.dp)
-                    .height(1.dp)
-                    .background(color = SubTextColor)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = stringResource(R.string.sub_title),
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
-                    fontWeight = FontWeight(500),
-                    color = SubTextColor)
-            )
+            Spacer(modifier = Modifier.height(UiSize.UI_SIZE_16))
 
-            Spacer(modifier = Modifier.height(16.dp))
-            ArticleList(callback)
+            ArticleList(onListItemClicked)
         }
     }
 }
 
 @Composable
-fun ArticleList(
-    itemClicked: (id: Int) -> Unit,
+private fun ArticleScreenHeader() {
+    Divider(
+        modifier = Modifier
+            .width(UiSize.UI_SIZE_318)
+            .height(UiSize.UI_SIZE_1)
+            .background(color = SubTextColor)
+    )
+    HeaderTitle(title = stringResource(R.string.sub_title))
+}
+
+@Composable
+private fun ArticleList(
+    onListItemClicked: (id: Int) -> Unit,
     viewModel: ArticleListViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
         viewModel.sendIntent(ArticleListViewIntent.LoadData)
+        viewModel.sideEffectSharedFlow.collectLatest {
+            if (it is ArticleListSideEffect.NavigateToDetails) {
+                onListItemClicked(it.id)
+            }
+        }
     }
 
     val viewState =
-        viewModel.stateSharedFlow.collectAsState(initial = ArticleListViewState.Loading)
+        viewModel.stateFlow.collectAsState(initial = ArticleListViewState.Loading)
 
     when (viewState.value) {
         is ArticleListViewState.Loading -> {
@@ -104,7 +108,7 @@ fun ArticleList(
             val articleList = (viewState.value as ArticleListViewState.Success).data
             LazyColumn {
                 items(articleList.size) {
-                    ArticleRow(rowIndex = it, entries = articleList, itemClicked)
+                    ArticleRow(rowIndex = it, entries = articleList)
                 }
             }
         }
@@ -134,23 +138,23 @@ fun ArticleEntry(
         Row(verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(entry.image_url)
+                    .data(entry.imageUrl)
                     .placeholder(R.drawable.loading)
                     .build(),
                 contentDescription = entry.title,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(UiSize.UI_SIZE_50)
             )
 
             Text(
                 text = entry.title,
                 maxLines = 2,
                 fontFamily = FontFamily(Font(R.font.roboto_regular)),
-                fontSize = 16.sp,
+                fontSize = UI_SP_SIZE_16,
                 fontWeight = FontWeight(600),
                 color = TextColor,
                 modifier = Modifier
-                    .padding(start = 10.dp)
+                    .padding(start = UiSize.UI_SIZE_10)
             )
         }
     }
@@ -158,18 +162,22 @@ fun ArticleEntry(
 
 
 @Composable
-fun ArticleRow(
+private fun ArticleRow(
     rowIndex: Int,
     entries: List<NewsArticle>,
-    itemClicked: (id: Int) -> Unit
+    viewModel:ArticleListViewModel = hiltViewModel()
 ) {
-    Column(modifier = Modifier.clickable { itemClicked.invoke(rowIndex+1) }) {
+    Column(modifier = Modifier.clickable {
+        viewModel.sendIntent(
+            ArticleListViewIntent.OnArticleClick(rowIndex.plus(1))
+        )
+    }) {
         Row {
             ArticleEntry(
                 entry = entries[rowIndex]
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(UiSize.UI_SIZE_10))
     }
 }
 
@@ -179,8 +187,8 @@ fun RetrySection(
     onRetry: () -> Unit
 ) {
     Column {
-        Text(error, color = Color.Red, fontSize = 18.sp)
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(error, color = Color.Red, fontSize = UI_SP_SIZE_18)
+        Spacer(modifier = Modifier.height(UiSize.UI_SIZE_8))
         Button(
             onClick = { onRetry() },
             modifier = Modifier.align(CenterHorizontally)

@@ -14,28 +14,25 @@ class ArticleListScreenTest {
     @Test
     fun test_characters_list_screen() {
         testRule.setContent {
-            ArticleEntry(getCharacterItem())
+            ArticleEntry(articleItem)
         }
         testRule.run {
             onNodeWithText(TITLE).assertExists()
         }
     }
 
-    private fun getCharacterItem(): NewsArticle {
-        return NewsArticle(
+    companion object {
+        const val TITLE = "Title"
+        const val SUMMARY = "Aummary"
+        val articleItem = NewsArticle(
             id = 1,
             title = "Title",
             url = "https://url.com",
-            image_url  = "https://utl.com",
-            news_site = "site",
+            imageUrl  = "https://utl.com",
+            newsSite = "site",
             summary = "Aummary",
-            published_at = "10/10/2023",
+            publishedAt = "10/10/2023",
             featured = false
         )
-    }
-
-    private companion object {
-        const val TITLE = "Title"
-        const val SUMMARY = "Aummary"
     }
 }

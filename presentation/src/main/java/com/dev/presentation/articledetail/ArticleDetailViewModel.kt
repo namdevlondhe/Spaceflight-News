@@ -22,14 +22,14 @@ class ArticleDetailViewModel @Inject constructor(
     /**
      * This function responsible for fetching the single news article
      */
-     private fun fetchArticleInfo(id: Int) {
+    private fun fetchArticleInfo(id: Int) {
         viewModelScope.launch {
             getArticleDetailsUseCase(id).onStart {
-                _state.emit(ArticleDetailViewState.Loading)
+                state.emit(ArticleDetailViewState.Loading)
             }.catch {
-                _state.emit(ArticleDetailViewState.Error(it))
-            }.collect{
-                _state.emit(ArticleDetailViewState.Success(articleMapper.mapFromModel(it)))
+                state.emit(ArticleDetailViewState.Error(it))
+            }.collect {
+                state.emit(ArticleDetailViewState.Success(articleMapper.map(it)))
             }
         }
     }
@@ -39,10 +39,10 @@ class ArticleDetailViewModel @Inject constructor(
      * @param intent - intent is the action
      */
     override fun sendIntent(intent: ArticleDetailViewIntent) {
-        when(intent){
-            is ArticleDetailViewIntent.LoadData -> {
-                fetchArticleInfo(intent.id)
-            }
+        when (intent) {
+            is ArticleDetailViewIntent.LoadData -> fetchArticleInfo(intent.id)
         }
     }
+    override fun createInitialState() = ArticleDetailViewState.Loading
+
 }
