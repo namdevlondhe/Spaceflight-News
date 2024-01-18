@@ -1,13 +1,11 @@
 package com.dev.presentation.articlelist
 
 import androidx.lifecycle.viewModelScope
-import com.dev.domain.usecase.ArticleListUseCase
-import com.dev.presentation.articledetail.ArticleDetailViewState
+import com.dev.domain.usecase.GetArticleListUseCase
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleResultMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,21 +14,27 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ArticleListViewModel @Inject constructor(
-    private val articleListUseCase: ArticleListUseCase,
+    private val articleListUseCase: GetArticleListUseCase,
     private val articleNewsMapper: NewsArticleResultMapper
-): BaseViewModel<ArticleListViewState, ArticleListViewIntent, ArticleListSideEffect>() {
+) : BaseViewModel<ArticleListViewState, ArticleListViewIntent, ArticleListSideEffect>() {
 
     /**
      * This function responsible for fetching the list of news articles
      */
-    fun fetchArticleList(){
+    fun fetchArticleList() {
         viewModelScope.launch {
-            articleListUseCase().onStart {
-                state.emit(ArticleListViewState.Loading)
-            }.catch {
-                state.emit(ArticleListViewState.Error(it))
-            }.collect{
-                state.emit(ArticleListViewState.Success(articleNewsMapper.map(it)))
+            articleListUseCase().collectLatest { result ->
+                when {
+                    result.isSuccess -> state.emit(
+                        ArticleListViewState.Success(
+                            articleNewsMapper.map(
+                                result.getOrNull()!!
+                            )
+                        )
+                    )
+
+                    result.isFailure -> state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
+                }
             }
         }
     }
@@ -50,7 +54,7 @@ class ArticleListViewModel @Inject constructor(
      * @param intent - intent is the action
      */
     override fun sendIntent(intent: ArticleListViewIntent) {
-        when(intent){
+        when (intent) {
             is ArticleListViewIntent.LoadData -> fetchArticleList()
             is ArticleListViewIntent.OnArticleClick -> navigateToDetails(intent.id)
         }

@@ -5,23 +5,23 @@ import androidx.compose.ui.unit.sp
 
 class UiSize {
     companion object {
-        val UI_SIZE_1 = 1.dp
-        val UI_SIZE_8 = 8.dp
-        val UI_SIZE_10 = 10.dp
-        val UI_SIZE_12 = 12.dp
-        val UI_SIZE_14 = 14.dp
-        val UI_SIZE_16 = 16.dp
-        val UI_SIZE_20 = 20.dp
-        val UI_SIZE_25 = 25.dp
-        val UI_SIZE_28 = 28.dp
-        val UI_SIZE_35 = 35.dp
-        val UI_SIZE_50 = 50.dp
-        val UI_SIZE_128 = 128.dp
-        val UI_SIZE_318 = 318.dp
+        val SIZE_1 = 1.dp
+        val SIZE_8 = 8.dp
+        val SIZE_10 = 10.dp
+        val SIZE_12 = 12.dp
+        val SIZE_14 = 14.dp
+        val SIZE_16 = 16.dp
+        val SIZE_20 = 20.dp
+        val SIZE_25 = 25.dp
+        val SIZE_28 = 28.dp
+        val SIZE_35 = 35.dp
+        val SIZE_50 = 50.dp
+        val SIZE_128 = 128.dp
+        val SIZE_318 = 318.dp
 
-        val UI_SP_SIZE_10 = 10.sp
-        val UI_SP_SIZE_30 = 30.sp
-        val UI_SP_SIZE_16 = 16.sp
-        val UI_SP_SIZE_18 = 18.sp
+        val SP_SIZE_10 = 10.sp
+        val SP_SIZE_30 = 30.sp
+        val SP_SIZE_16 = 16.sp
+        val SP_SIZE_18 = 18.sp
     }
 }

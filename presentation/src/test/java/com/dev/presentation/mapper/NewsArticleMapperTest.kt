@@ -12,16 +12,13 @@ class NewsArticleMapperTest {
 
     @Test
     fun `WHEN map invoked THEN NewsArticle is returned`() {
-        // Given
         val mockArticle = mockk<Article>()
         val expectedNewsArticle = FakeData.getNewsArticle()
 
         every { newsArticleMapper.map(mockArticle) } returns FakeData.getNewsArticle()
 
-        // When
         val result = newsArticleMapper.map(FakeData.getArticle())
 
-        // Then
         assertEquals(expectedNewsArticle, result)
     }
 }

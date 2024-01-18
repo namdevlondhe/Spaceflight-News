@@ -1,23 +1,17 @@
 package com.dev.presentation.articlelist
 
+import app.cash.turbine.test
 import com.dev.domain.fakes.FakeData
-import com.dev.domain.model.ArticleResult
-import com.dev.domain.usecase.ArticleListUseCase
+import com.dev.domain.usecase.GetArticleListUseCase
 import com.dev.presentation.mapper.NewsArticleResultMapper
-import com.dev.presentation.model.NewsArticle
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -30,7 +24,7 @@ import org.junit.Test
 class ArticleListViewModelTest {
 
     private lateinit var viewModel: ArticleListViewModel
-    private val articleListUseCase: ArticleListUseCase = mockk()
+    private val articleListUseCase: GetArticleListUseCase = mockk()
     private val articleNewsMapper: NewsArticleResultMapper = mockk()
 
     @Before
@@ -49,18 +43,32 @@ class ArticleListViewModelTest {
     @Test
     fun `Given fetchArticleList is called, When use case returns data, Then Loading and Success states should be emitted`() =
         runTest {
-            val data = listOf( FakeData.getNewsArticle())
-            coEvery { articleListUseCase() } returns flowOf( FakeData.getArticles())
+            val data = FakeData.getNewsArticleList()
+            coEvery { articleListUseCase() } returns flowOf(Result.success(FakeData.getArticles()))
 
             coEvery {
                 articleNewsMapper.map(FakeData.getArticles())
             } returns data
 
             viewModel.sendIntent(ArticleListViewIntent.LoadData)
-            val result = viewModel.stateFlow.value
-            Assert.assertEquals(
-                result,
-                viewModel.stateFlow.value
-            )
+
+            viewModel.stateFlow.test {
+                advanceUntilIdle()
+                Assert.assertTrue((awaitItem() is ArticleListViewState.Success))
+            }
+        }
+
+    @Test
+    fun `fetch article list failed GIVEN intent WHEN fetchArticleList called THEN verify use-case called to get success result`() =
+        runTest {
+            coEvery { articleListUseCase() } answers {
+                flowOf(Result.failure(Exception()))
+            }
+
+            viewModel.sendIntent(ArticleListViewIntent.LoadData)
+
+            viewModel.stateFlow.test {
+                Assert.assertTrue(awaitItem() is ArticleListViewState.Error)
+            }
         }
 }

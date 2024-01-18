@@ -1,12 +1,10 @@
 package com.dev.data.fakes
 
-import com.dev.data.dto.ArticleData
-import com.dev.data.dto.ArticleResultData
 import com.dev.domain.model.Article
 import com.dev.domain.model.ArticleResult
 
 object FakeCharactersList {
-    fun getArticleList() = ArticleResultData(
+    fun getArticleList() = com.dev.data.dto.ArticleResultModel(
         1,
         "Next",
         "Previous",
@@ -53,7 +51,7 @@ object FakeCharactersList {
         )
     )
 
-    fun getArticleData() = ArticleData(
+    fun getArticleData() = com.dev.data.dto.ArticleModel(
         id = 1,
         title = "Title",
         url = "https://url.com",

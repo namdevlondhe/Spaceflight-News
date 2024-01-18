@@ -41,8 +41,8 @@ import com.dev.presentation.ui.theme.BackgroundColor
 import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
 import com.dev.presentation.ui.theme.UiSize
-import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_16
-import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_18
+import com.dev.presentation.ui.theme.UiSize.Companion.SP_SIZE_16
+import com.dev.presentation.ui.theme.UiSize.Companion.SP_SIZE_18
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -56,10 +56,10 @@ fun ArticleListScreen(
         color = BackgroundColor,
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(start = UiSize.UI_SIZE_28, end = UiSize.UI_SIZE_25)) {
+        Column(modifier = Modifier.padding(start = UiSize.SIZE_28, end = UiSize.SIZE_25)) {
             ArticleScreenHeader()
 
-            Spacer(modifier = Modifier.height(UiSize.UI_SIZE_16))
+            Spacer(modifier = Modifier.height(UiSize.SIZE_16))
 
             ArticleList(onListItemClicked)
         }
@@ -70,8 +70,8 @@ fun ArticleListScreen(
 private fun ArticleScreenHeader() {
     Divider(
         modifier = Modifier
-            .width(UiSize.UI_SIZE_318)
-            .height(UiSize.UI_SIZE_1)
+            .width(UiSize.SIZE_318)
+            .height(UiSize.SIZE_1)
             .background(color = SubTextColor)
     )
     HeaderTitle(title = stringResource(R.string.sub_title))
@@ -143,18 +143,18 @@ fun ArticleEntry(
                     .build(),
                 contentDescription = entry.title,
                 modifier = Modifier
-                    .size(UiSize.UI_SIZE_50)
+                    .size(UiSize.SIZE_50)
             )
 
             Text(
                 text = entry.title,
                 maxLines = 2,
                 fontFamily = FontFamily(Font(R.font.roboto_regular)),
-                fontSize = UI_SP_SIZE_16,
+                fontSize = SP_SIZE_16,
                 fontWeight = FontWeight(600),
                 color = TextColor,
                 modifier = Modifier
-                    .padding(start = UiSize.UI_SIZE_10)
+                    .padding(start = UiSize.SIZE_10)
             )
         }
     }
@@ -177,7 +177,7 @@ private fun ArticleRow(
                 entry = entries[rowIndex]
             )
         }
-        Spacer(modifier = Modifier.height(UiSize.UI_SIZE_10))
+        Spacer(modifier = Modifier.height(UiSize.SIZE_10))
     }
 }
 
@@ -187,8 +187,8 @@ fun RetrySection(
     onRetry: () -> Unit
 ) {
     Column {
-        Text(error, color = Color.Red, fontSize = UI_SP_SIZE_18)
-        Spacer(modifier = Modifier.height(UiSize.UI_SIZE_8))
+        Text(error, color = Color.Red, fontSize = SP_SIZE_18)
+        Spacer(modifier = Modifier.height(UiSize.SIZE_8))
         Button(
             onClick = { onRetry() },
             modifier = Modifier.align(CenterHorizontally)

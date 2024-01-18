@@ -42,6 +42,19 @@ object FakeData {
         "site",
         "Aummary",
         "10/10/2023",
-         false
+        false
+    )
+
+    fun getNewsArticleList(): List<NewsArticle> = arrayListOf(
+        NewsArticle(
+            1,
+            "Title",
+            "https://url.com",
+            "https://utl.com",
+            "site",
+            "Aummary",
+            "10/10/2023",
+            false
+        )
     )
 }

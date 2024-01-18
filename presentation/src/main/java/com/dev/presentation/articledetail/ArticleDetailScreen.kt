@@ -45,7 +45,7 @@ import com.dev.presentation.ui.theme.BackgroundColor
 import com.dev.presentation.ui.theme.SubTextColor
 import com.dev.presentation.ui.theme.TextColor
 import com.dev.presentation.ui.theme.UiSize
-import com.dev.presentation.ui.theme.UiSize.Companion.UI_SP_SIZE_30
+import com.dev.presentation.ui.theme.UiSize.Companion.SP_SIZE_30
 
 /**
  * This composable function is responsible for creating detail screen for News Artile
@@ -95,25 +95,25 @@ fun DetailDataScreen(data: NewsArticle) {
     Surface(
         color = BackgroundColor, modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(start = UiSize.UI_SIZE_28, end = UiSize.UI_SIZE_25)) {
-            Spacer(modifier = Modifier.height(UiSize.UI_SIZE_20))
+        Column(modifier = Modifier.padding(start = UiSize.SIZE_28, end = UiSize.SIZE_25)) {
+            Spacer(modifier = Modifier.height(UiSize.SIZE_20))
 
             Text(
                 text = data.title, style = TextStyle(
-                    fontSize = UI_SP_SIZE_30,
+                    fontSize = SP_SIZE_30,
                     fontFamily = FontFamily(Font(R.font.roboto_regular)),
                     fontWeight = FontWeight(700),
                     color = TextColor,
                     letterSpacing = 1.8.sp,
                 ), modifier = Modifier
-                    .width(UiSize.UI_SIZE_128)
-                    .height(UiSize.UI_SIZE_35)
+                    .width(UiSize.SIZE_128)
+                    .height(UiSize.SIZE_35)
             )
             Divider(
                 modifier = Modifier
-                    .padding(top = UiSize.UI_SIZE_12, bottom = UiSize.UI_SIZE_12)
-                    .width(UiSize.UI_SIZE_318)
-                    .height(UiSize.UI_SIZE_1)
+                    .padding(top = UiSize.SIZE_12, bottom = UiSize.SIZE_12)
+                    .width(UiSize.SIZE_318)
+                    .height(UiSize.SIZE_1)
                     .background(color = SubTextColor)
             )
             AsyncImage(

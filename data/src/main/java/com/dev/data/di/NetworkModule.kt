@@ -3,12 +3,10 @@ package com.dev.data.di
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.dev.data.mapper.ArticleDataMapper
 import com.dev.data.mapper.ArticleResultDataMapper
 import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
 import com.dev.domain.repository.ArticleRepository
-import com.dev.domain.usecase.ArticleListUseCase
 import com.dev.domain.usecase.GetArticleListUseCase
 import com.google.gson.Gson
 import dagger.Module
@@ -16,6 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -101,13 +100,14 @@ class NetworkModule {
     @Provides
     fun provideArticleRepository(
         retrofitService: RetrofitService,
-        articleResultDataMapper: ArticleResultDataMapper
+        articleResultDataMapper: ArticleResultDataMapper,
+        dispatcher:CoroutineDispatcher
     ): ArticleRepository =
-        ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
+        ArticleRepositoryImpl(retrofitService, articleResultDataMapper,dispatcher)
 
     @Singleton
     @Provides
     fun providesArticleListUseCase(
         articleRepository: ArticleRepository
-    ): ArticleListUseCase = GetArticleListUseCase(articleRepository)
+    ) = GetArticleListUseCase(articleRepository)
 }

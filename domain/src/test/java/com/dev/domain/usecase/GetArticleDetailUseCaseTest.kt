@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -25,7 +26,7 @@ class GetArticleDetailUseCaseTest {
     @Test
     fun `GIVEN id WHEN use-case invoke called THEN character detail return`() = runTest {
         val character = FakeData.getArticle()
-        coEvery { characterRepository.getArticleDetails(ID) } returns character
+        coEvery { characterRepository.getArticleDetails(ID) } returns flowOf(Result.success(character))
 
         getCharacterByIdUseCaseImpl(ID)
 

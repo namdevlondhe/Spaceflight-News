@@ -1,7 +1,7 @@
 package com.dev.data.mapper
 
-import com.dev.data.dto.ArticleData
-import com.dev.data.dto.ArticleResultData
+import com.dev.data.dto.ArticleModel
+import com.dev.data.dto.ArticleResultModel
 import com.dev.data.fakes.FakeCharactersList
 import io.mockk.every
 import io.mockk.mockk
@@ -15,18 +15,15 @@ class ArticleResultDataMapperTest {
 
     @Test
     fun `WHEN map invoked THEN ArticleResult is returned`() {
-        // Given
-        val mockArticleResultData = mockk<ArticleResultData>()
-        val mockArticleResult = mockk<ArticleData>()
+        val mockArticleResultData = mockk<ArticleResultModel>()
+        val mockArticleResult = mockk<ArticleModel>()
         val expectedArticleResult = FakeCharactersList.getArticleResult()
 
         every { characterMapper.map(mockArticleResult) } returns FakeCharactersList.getArticle()
         every { articleResultDataMapper.map(mockArticleResultData) } returns FakeCharactersList.getArticleResult()
 
-        // When
         val result = articleResultDataMapper.map(FakeCharactersList.getArticleList())
 
-        // Then
         assertEquals(expectedArticleResult, result)
     }
 }

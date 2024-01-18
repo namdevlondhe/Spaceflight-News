@@ -16,12 +16,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.dev.presentation.R
 import com.dev.presentation.ui.theme.BackgroundColor
-import com.dev.presentation.ui.theme.UiSize.Companion.UI_SIZE_14
+import com.dev.presentation.ui.theme.UiSize.Companion.SIZE_14
 
 /**
  * This composable function is used for base screen for tool bar and action handling for back
@@ -44,7 +42,7 @@ fun BaseScreen(
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = UI_SIZE_14)
+                        modifier = Modifier.padding(start = SIZE_14)
                     ) {
                         if (showBackButton) {
                             IconButton(onClick = { onBackClicked.invoke() }) {

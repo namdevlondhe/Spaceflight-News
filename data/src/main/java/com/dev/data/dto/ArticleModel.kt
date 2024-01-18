@@ -1,6 +1,6 @@
 package com.dev.data.dto
 
-data class ArticleData(
+data class ArticleModel(
     val id: Int,
     val title: String,
     val url: String,
