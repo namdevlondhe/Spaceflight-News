@@ -28,7 +28,7 @@ class GetArticleListUseCaseTest {
         val characters = FakeData.getArticles()
         coEvery { characterRepository.getArticles() } returns flowOf(Result.success(characters))
 
-        getCharactersUseCaseImpl()
+        getCharactersUseCaseImpl.invoke()
 
         verify(times(1)) {
             characterRepository.getArticles()
@@ -41,7 +41,7 @@ class GetArticleListUseCaseTest {
             throw IOException()
         }
 
-        getCharactersUseCaseImpl()
+        getCharactersUseCaseImpl.invoke()
 
         verify(times(1)) {
             characterRepository.getArticles()
