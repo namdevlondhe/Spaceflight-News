@@ -47,7 +47,7 @@ class ArticleDetailViewModelTest {
     fun `fetchArticleInfo should emit Loading, Success states when use case returns data`() =
         runTest {
             val data = FakeData.getNewsArticle()
-            coEvery { getArticleDetailUseCase(ID) } returns flowOf(Result.success(FakeData.getArticle()))
+            coEvery { getArticleDetailUseCase.invoke(ID) } returns Result.success(FakeData.getArticle())
 
             coEvery {
                 articleMapper.map(FakeData.getArticles().results[0])
@@ -64,8 +64,8 @@ class ArticleDetailViewModelTest {
     @Test
     fun `fetchArticleInfo should emit Loading, Error states when use case throws an exception`() =
         runTest {
-            coEvery { getArticleDetailUseCase(ID) } answers {
-                flowOf(Result.failure(Exception()))
+            coEvery { getArticleDetailUseCase.invoke(ID) } answers {
+                Result.failure(Exception())
             }
 
             viewModel.sendIntent(ArticleDetailViewIntent.LoadData(ID))

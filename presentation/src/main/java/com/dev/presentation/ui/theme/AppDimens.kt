@@ -19,7 +19,6 @@ class UiSize {
         val SIZE_128 = 128.dp
         val SIZE_318 = 318.dp
 
-        val SP_SIZE_10 = 10.sp
         val SP_SIZE_30 = 30.sp
         val SP_SIZE_16 = 16.sp
         val SP_SIZE_18 = 18.sp

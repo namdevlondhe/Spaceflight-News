@@ -22,12 +22,12 @@ class ArticleRepositoryImplTest {
             val retrofitService = mockk<RetrofitService>()
             val articleResultDataMapper = mockk<ArticleResultDataMapper>()
             val repository =
-                ArticleRepositoryImpl(retrofitService, articleResultDataMapper, Dispatchers.IO)
+                ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
             coEvery { retrofitService.getArticles() } returns mockArticles
             coEvery { articleResultDataMapper.map(any()) } returns articleResul
 
-            repository.getArticles().toList()
+            repository.getArticles()
 
             coVerify(exactly = 1) { retrofitService.getArticles() }
             coVerify(exactly = 1) { articleResultDataMapper.map(any()) }
@@ -40,11 +40,11 @@ class ArticleRepositoryImplTest {
             val retrofitService = mockk<RetrofitService>()
             val articleResultDataMapper = mockk<ArticleResultDataMapper>()
             val repository =
-                ArticleRepositoryImpl(retrofitService, articleResultDataMapper, Dispatchers.IO)
+                ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
             coEvery { retrofitService.getArticleDetail(any()) } returns mockArticle
 
-            repository.getArticleDetails(1).toList()
+            repository.getArticleDetails(1)
 
             coVerify(exactly = 1) { retrofitService.getArticleDetail(any()) }
         }

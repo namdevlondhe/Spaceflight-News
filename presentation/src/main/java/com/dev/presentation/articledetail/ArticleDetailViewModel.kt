@@ -26,19 +26,17 @@ class ArticleDetailViewModel @Inject constructor(
      */
     private fun fetchArticleInfo(id: Int) {
         viewModelScope.launch {
-            getArticleDetailsUseCase.invoke(id).collectLatest { result ->
-                when {
-                    result.isSuccess -> state.emit(
-                        ArticleDetailViewState.Success(
-                            articleMapper.map(
-                                result.getOrNull()!!
-                            )
+            val result = getArticleDetailsUseCase.invoke(id)
+            when {
+                result.isSuccess -> state.emit(
+                    ArticleDetailViewState.Success(
+                        articleMapper.map(
+                            result.getOrNull()!!
                         )
                     )
+                )
 
-                    result.isFailure -> state.emit(ArticleDetailViewState.Error(result.exceptionOrNull()!!))
-                }
-
+                result.isFailure -> state.emit(ArticleDetailViewState.Error(result.exceptionOrNull()!!))
             }
         }
     }

@@ -100,10 +100,9 @@ class NetworkModule {
     @Provides
     fun provideArticleRepository(
         retrofitService: RetrofitService,
-        articleResultDataMapper: ArticleResultDataMapper,
-        dispatcher:CoroutineDispatcher
+        articleResultDataMapper: ArticleResultDataMapper
     ): ArticleRepository =
-        ArticleRepositoryImpl(retrofitService, articleResultDataMapper,dispatcher)
+        ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
 
     @Singleton
     @Provides

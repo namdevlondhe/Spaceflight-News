@@ -23,18 +23,22 @@ class ArticleListViewModel @Inject constructor(
      */
     fun fetchArticleList() {
         viewModelScope.launch {
-            articleListUseCase().collectLatest { result ->
-                when {
-                    result.isSuccess -> state.emit(
-                        ArticleListViewState.Success(
-                            articleNewsMapper.map(
-                                result.getOrNull()!!
+            val result = articleListUseCase.invoke()
+            when {
+                result.isSuccess ->
+                    try {
+                        state.emit(
+                            ArticleListViewState.Success(
+                                articleNewsMapper.map(
+                                    result.getOrNull()!!
+                                )
                             )
                         )
-                    )
+                    } catch (e: Exception) {
+                        state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
+                    }
 
-                    result.isFailure -> state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
-                }
+                result.isFailure -> state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
             }
         }
     }
