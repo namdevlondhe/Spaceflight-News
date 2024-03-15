@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dev.presentation.R
 import com.dev.presentation.ui.theme.BackgroundColor
+import com.dev.presentation.ui.theme.UiSize.Companion.SIZE_1
 import com.dev.presentation.ui.theme.UiSize.Companion.SIZE_14
 
 /**
@@ -42,7 +43,7 @@ fun BaseScreen(
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = SIZE_14)
+                        modifier = Modifier.padding(start = SIZE_1)
                     ) {
                         if (showBackButton) {
                             IconButton(onClick = { onBackClicked.invoke() }) {

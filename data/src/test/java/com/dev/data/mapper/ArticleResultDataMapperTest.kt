@@ -11,7 +11,7 @@ import org.junit.Test
 class ArticleResultDataMapperTest {
 
     private val characterMapper = mockk<ArticleDataMapper>()
-    private val articleResultDataMapper = ArticleResultDataMapper(characterMapper)
+    private val articleResultDataMapper = ArticleResultDataMapper()
 
     @Test
     fun `WHEN map invoked THEN ArticleResult is returned`() {

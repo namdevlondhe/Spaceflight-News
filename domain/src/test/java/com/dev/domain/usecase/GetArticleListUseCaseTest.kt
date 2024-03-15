@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.verify
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +25,7 @@ class GetArticleListUseCaseTest {
     @Test
     fun `GIVEN no data WHEN use-case invoke called THEN character list return`() = runTest {
         val characters = FakeData.getArticles()
-        coEvery { characterRepository.getArticles() } returns flowOf(Result.success(characters))
+        coEvery { characterRepository.getArticles() } returns Result.success(characters)
 
         getCharactersUseCaseImpl.invoke()
 

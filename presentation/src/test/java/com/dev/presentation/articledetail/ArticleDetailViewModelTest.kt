@@ -10,10 +10,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -47,31 +44,34 @@ class ArticleDetailViewModelTest {
     fun `fetchArticleInfo should emit Loading, Success states when use case returns data`() =
         runTest {
             val data = FakeData.getNewsArticle()
-            coEvery { getArticleDetailUseCase.invoke(ID) } returns Result.success(FakeData.getArticle())
+            coEvery { getArticleDetailUseCase(ID) } returns Result.success(FakeData.getArticle())
 
             coEvery {
                 articleMapper.map(FakeData.getArticles().results[0])
             } returns data
 
-            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(ID))
-            val result = viewModel.stateFlow.value
-            assertEquals(
-                result,
-                viewModel.stateFlow.value
-            )
+            with(viewModel) {
+                sendIntent(ArticleDetailViewIntent.LoadData(ID))
+                stateFlow.test {
+                    advanceUntilIdle()
+                    Assert.assertTrue(awaitItem() is ArticleDetailViewState.Success)
+                }
+            }
         }
 
     @Test
     fun `fetchArticleInfo should emit Loading, Error states when use case throws an exception`() =
         runTest {
-            coEvery { getArticleDetailUseCase.invoke(ID) } answers {
+            coEvery { getArticleDetailUseCase(ID) } answers {
                 Result.failure(Exception())
             }
 
-            viewModel.sendIntent(ArticleDetailViewIntent.LoadData(ID))
+            with(viewModel) {
+                sendIntent(ArticleDetailViewIntent.LoadData(ID))
+                stateFlow.test {
 
-            viewModel.stateFlow.test {
-                Assert.assertTrue(awaitItem() is ArticleDetailViewState.Error)
+                    Assert.assertTrue(awaitItem() is ArticleDetailViewState.Error)
+                }
             }
         }
 

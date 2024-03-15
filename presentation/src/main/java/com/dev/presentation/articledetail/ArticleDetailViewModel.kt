@@ -1,14 +1,10 @@
 package com.dev.presentation.articledetail
 
 import androidx.lifecycle.viewModelScope
-import com.dev.domain.model.Article
 import com.dev.domain.usecase.GetArticleDetailUseCase
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,17 +22,17 @@ class ArticleDetailViewModel @Inject constructor(
      */
     private fun fetchArticleInfo(id: Int) {
         viewModelScope.launch {
-            val result = getArticleDetailsUseCase.invoke(id)
-            when {
-                result.isSuccess -> state.emit(
+            getArticleDetailsUseCase(id).onSuccess {
+                state.emit(
                     ArticleDetailViewState.Success(
                         articleMapper.map(
-                            result.getOrNull()!!
+                            it
                         )
                     )
                 )
-
-                result.isFailure -> state.emit(ArticleDetailViewState.Error(result.exceptionOrNull()!!))
+            }.onFailure {
+                it.message?.let { it1 -> ArticleDetailViewState.Error(it1) }
+                    ?.let { it2 -> state.emit(it2) }
             }
         }
     }

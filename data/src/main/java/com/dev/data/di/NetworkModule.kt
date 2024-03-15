@@ -1,20 +1,13 @@
 package com.dev.data.di
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import com.dev.data.mapper.ArticleResultDataMapper
-import com.dev.data.repository.ArticleRepositoryImpl
 import com.dev.data.source.remote.RetrofitService
-import com.dev.domain.repository.ArticleRepository
-import com.dev.domain.usecase.GetArticleListUseCase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -68,6 +61,11 @@ class NetworkModule {
         return client.build()
     }
 
+    @Singleton
+    @Provides
+    fun provideService(retrofit: Retrofit): RetrofitService =
+        retrofit.create(RetrofitService::class.java)
+
     @Provides
     @Singleton
     fun providesGson() = Gson()
@@ -76,37 +74,8 @@ class NetworkModule {
     @Singleton
     fun providesGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
-
     @Provides
     @Singleton
     fun providesRxJavaCallAdapterFactory(): RxJava2CallAdapterFactory =
         RxJava2CallAdapterFactory.create()
-
-    @Provides
-    @Singleton
-    fun provideIsNetworkAvailable(@ApplicationContext context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
-    }
-
-    @Singleton
-    @Provides
-    fun provideService(retrofit: Retrofit): RetrofitService =
-        retrofit.create(RetrofitService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideArticleRepository(
-        retrofitService: RetrofitService,
-        articleResultDataMapper: ArticleResultDataMapper
-    ): ArticleRepository =
-        ArticleRepositoryImpl(retrofitService, articleResultDataMapper)
-
-    @Singleton
-    @Provides
-    fun providesArticleListUseCase(
-        articleRepository: ArticleRepository
-    ) = GetArticleListUseCase(articleRepository)
 }

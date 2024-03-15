@@ -76,12 +76,12 @@ fun ArticleDetailScreen(
         }
 
         is ArticleDetailViewState.Error -> {
-            (viewState.value as ArticleDetailViewState.Error).throwable.message?.let {
+            (viewState.value as ArticleDetailViewState.Error).let {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    RetrySection(it) {
+                    RetrySection(it.message) {
                         viewModel.sendIntent(ArticleDetailViewIntent.LoadData(id))
                     }
                 }
@@ -95,8 +95,8 @@ fun DetailDataScreen(data: NewsArticle) {
     Surface(
         color = BackgroundColor, modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(start = UiSize.SIZE_28, end = UiSize.SIZE_25)) {
-            Spacer(modifier = Modifier.height(UiSize.SIZE_20))
+        Column(modifier = Modifier.padding(start = UiSize.SIZE_10, end = UiSize.SIZE_10)) {
+            Spacer(modifier = Modifier.height(UiSize.SIZE_5))
 
             Text(
                 text = data.title, style = TextStyle(
@@ -109,18 +109,11 @@ fun DetailDataScreen(data: NewsArticle) {
                     .width(UiSize.SIZE_128)
                     .height(UiSize.SIZE_35)
             )
-            Divider(
-                modifier = Modifier
-                    .padding(top = UiSize.SIZE_12, bottom = UiSize.SIZE_12)
-                    .width(UiSize.SIZE_318)
-                    .height(UiSize.SIZE_1)
-                    .background(color = SubTextColor)
-            )
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current).data(data.imageUrl)
                     .placeholder(R.drawable.loading).build(),
                 contentDescription = data.title,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top = UiSize.SIZE_1)
             )
 
             WebView(url = data.url)

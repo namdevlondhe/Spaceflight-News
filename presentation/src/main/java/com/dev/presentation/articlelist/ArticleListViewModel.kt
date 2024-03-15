@@ -5,7 +5,6 @@ import com.dev.domain.usecase.GetArticleListUseCase
 import com.dev.presentation.base.BaseViewModel
 import com.dev.presentation.mapper.NewsArticleResultMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,22 +22,15 @@ class ArticleListViewModel @Inject constructor(
      */
     fun fetchArticleList() {
         viewModelScope.launch {
-            val result = articleListUseCase.invoke()
-            when {
-                result.isSuccess ->
-                    try {
-                        state.emit(
-                            ArticleListViewState.Success(
-                                articleNewsMapper.map(
-                                    result.getOrNull()!!
-                                )
-                            )
-                        )
-                    } catch (e: Exception) {
-                        state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
-                    }
-
-                result.isFailure -> state.emit(ArticleListViewState.Error(result.exceptionOrNull()!!))
+            articleListUseCase().onSuccess {
+                state.emit(
+                    ArticleListViewState.Success(
+                        articleNewsMapper.map(it)
+                    )
+                )
+            }.onFailure {
+                it.message?.let { it1 -> ArticleListViewState.Error(it1) }
+                    ?.let { it2 -> state.emit(it2) }
             }
         }
     }

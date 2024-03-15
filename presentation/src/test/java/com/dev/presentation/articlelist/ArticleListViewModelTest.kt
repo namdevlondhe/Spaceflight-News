@@ -44,31 +44,33 @@ class ArticleListViewModelTest {
     fun `Given fetchArticleList is called, When use case returns data, Then Loading and Success states should be emitted`() =
         runTest {
             val data = FakeData.getNewsArticleList()
-            coEvery { articleListUseCase.invoke() } returns Result.success(FakeData.getArticles())
+            coEvery { articleListUseCase() } returns Result.success(FakeData.getArticles())
 
             coEvery {
                 articleNewsMapper.map(FakeData.getArticles())
             } returns data
 
-            viewModel.sendIntent(ArticleListViewIntent.LoadData)
-
-            viewModel.stateFlow.test {
-                advanceUntilIdle()
-                Assert.assertTrue((awaitItem() is ArticleListViewState.Success))
+            with(viewModel) {
+                sendIntent(ArticleListViewIntent.LoadData)
+                stateFlow.test {
+                    advanceUntilIdle()
+                    Assert.assertTrue((awaitItem() is ArticleListViewState.Success))
+                }
             }
         }
 
     @Test
     fun `fetch article list failed GIVEN intent WHEN fetchArticleList called THEN verify use-case called to get success result`() =
         runTest {
-            coEvery { articleListUseCase.invoke() } answers {
+            coEvery { articleListUseCase() } answers {
                 Result.failure(Exception())
             }
+            with(viewModel) {
+                sendIntent(ArticleListViewIntent.LoadData)
 
-            viewModel.sendIntent(ArticleListViewIntent.LoadData)
-
-            viewModel.stateFlow.test {
-                Assert.assertTrue(awaitItem() is ArticleListViewState.Error)
+                stateFlow.test {
+                    Assert.assertTrue(awaitItem() is ArticleListViewState.Error)
+                }
             }
         }
 }

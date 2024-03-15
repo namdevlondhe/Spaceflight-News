@@ -10,7 +10,7 @@ sealed interface ArticleListViewState: ViewState {
 
     class Success(val data: List<NewsArticle>) : ArticleListViewState
 
-    class Error(val throwable: Throwable): ArticleListViewState
+    class Error(val message: String): ArticleListViewState
 }
 
 sealed interface ArticleListViewIntent: ViewIntent {
